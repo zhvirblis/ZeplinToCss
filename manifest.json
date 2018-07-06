@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "Zeplin info to CSS",
+  "version": "0.2.1",
+  "icons": {
+     "128": "icon128.png"
+  },
+  "content_scripts": [{
+     "matches": [ "http://app.zeplin.io/*","https://app.zeplin.io/*" ],
+     "js": ["content.js" ],
+     "all_frames": true
+   }],							    
+   "browser_action": {
+     "default_title": "Zeplin info to CSS",
+     "default_icon": "icon19.png",
+     "default_popup": "popup.html"
+   }
+}
