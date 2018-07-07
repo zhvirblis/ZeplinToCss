@@ -1,8 +1,26 @@
 let body = document.querySelector('body');
 
 const dictionary = {
-    "Width:": 'width',
-    "Height:": 'height'
+    'Width:': {
+        type: 'Pt',
+        cssName: 'width'
+    },
+    'Height:': {
+        type: 'Pt', 
+        cssName: 'height'
+    },
+    'Radius:': {
+        type: 'Pt', 
+        cssName: 'border-radius'
+    },
+    'Size:': {
+        type: 'Pt', 
+        cssName: 'font-size'
+    },
+    'Align:': {
+        type: 'String',
+        cssName: 'text-align'
+    }
 }
 
 var observer = new window.MutationObserver(function(mutations) {
@@ -13,7 +31,7 @@ var observer = new window.MutationObserver(function(mutations) {
                     continue;
                 }
                 let elems = mutation.addedNodes[i].querySelectorAll('.layerProperty'); 
-                console.log("------------");
+                getColorValue(body);
                 let css = fromElemsToCSS(elems);
                 console.log(css);
             }
@@ -29,10 +47,19 @@ observer.observe(body, {
 function fromElemsToCSS(elems) {
     let css = '.classname {\n';
     for(let i = 0;i < elems.length; i++) {
-        let value = getPropertyNameValue(elems[i]);
-        console.log('Value', value);
-        if(dictionary[value.propertyName]) {
-            css += `    ${dictionary[value.propertyName]}: ${value.propertyValue};\n`;
+        let nameValue = getPropertyNameValue(elems[i]);
+        console.log('Value', nameValue);
+        if(dictionary[nameValue.propertyName]) {
+            let cssValue;
+            if(dictionary[nameValue.propertyName]) {
+                if(dictionary[nameValue.propertyName].type === 'Pt') {
+                    cssValue = ptToPx(nameValue.propertyValue) + 'px';
+                }
+                else {
+                    cssValue = nameValue.propertyValue;
+                }
+                css += `    ${dictionary[nameValue.propertyName].cssName}: ${cssValue};\n`;
+            }
         }
     }
     return `${css}}`;
@@ -44,3 +71,11 @@ function getPropertyNameValue(elem) {
     return { propertyName, propertyValue };
 }
 
+function ptToPx(ptValue) {
+    return Number.parseInt(ptValue);
+}
+
+function getColorValue(elem) {
+    let sidebarSections = elem.querySelectorAll('.sidebarSection');
+    console.log(sidebarSections);
+}
